@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { UniversidadService } from '../../servicios/universidad.service';
 
 @Component({
   selector: 'app-prediccion',
@@ -12,7 +12,10 @@ export class PrediccionComponent {
   resultado: number | null = null;
   cargando = false;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(
+    private fb: FormBuilder,
+    private universidadService: UniversidadService
+  ) {
     this.formulario = this.fb.group({
       academic_reputation: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
       employer_reputation: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -21,24 +24,22 @@ export class PrediccionComponent {
     });
   }
 
-  predecir() {
+  predecir(): void {
     if (this.formulario.invalid) return;
 
     this.cargando = true;
     const datos = this.formulario.value;
 
-    this.http.post<any>('http://localhost:8080/api/universidad/prediccion', datos).subscribe({
-      next: res => {
-        this.resultado = res.overall_score;
+    this.universidadService.predecir(datos).subscribe({
+      next: (res: any) => {
+        this.resultado = res.overall_score ?? res.puntaje_estimado ?? null;
         this.cargando = false;
       },
-      error: err => {
+      error: (err) => {
         console.error('Error en la predicción', err);
         this.cargando = false;
         alert('Error al obtener predicción. Verifica la conexión o el backend.');
       }
     });
   }
-
-
 }

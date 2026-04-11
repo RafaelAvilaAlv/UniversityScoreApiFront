@@ -18,6 +18,7 @@ export class AuthService {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('token');
       const rol = localStorage.getItem('rol');
+
       if (token) this.tokenSubject.next(token);
       if (rol) this.rolSubject.next(rol);
     }
@@ -33,10 +34,8 @@ export class AuthService {
         const decoded: any = jwtDecode(respuesta.token);
         const rol = decoded.rol;
 
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('token', respuesta.token);
-          localStorage.setItem('rol', rol);
-        }
+        localStorage.setItem('token', respuesta.token);
+        localStorage.setItem('rol', rol);
 
         this.tokenSubject.next(respuesta.token);
         this.rolSubject.next(rol);
@@ -46,16 +45,12 @@ export class AuthService {
 
   guardarToken(token: string): void {
     this.tokenSubject.next(token);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('token', token);
-    }
+    localStorage.setItem('token', token);
   }
 
   guardarRol(rol: string): void {
     this.rolSubject.next(rol);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('rol', rol);
-    }
+    localStorage.setItem('rol', rol);
   }
 
   obtenerToken(): string | null {
@@ -69,15 +64,11 @@ export class AuthService {
   cerrarSesion(): void {
     this.tokenSubject.next(null);
     this.rolSubject.next(null);
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('token');
-      localStorage.removeItem('rol');
-    }
+    localStorage.removeItem('token');
+    localStorage.removeItem('rol');
   }
 
   estaAutenticado(): boolean {
-    if (typeof window === 'undefined') return false;
-
     const token = localStorage.getItem('token');
     if (!token) return false;
 
@@ -85,8 +76,7 @@ export class AuthService {
       const payload = JSON.parse(atob(token.split('.')[1]));
       const ahora = Math.floor(Date.now() / 1000);
       return payload.exp && payload.exp > ahora;
-    } catch (error) {
-      console.error('Token inválido', error);
+    } catch {
       return false;
     }
   }

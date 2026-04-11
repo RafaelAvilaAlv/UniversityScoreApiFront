@@ -1,48 +1,43 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgChartsModule } from 'ng2-charts'; // ✅ Importar módulo de gráficos
-
+import { NgChartsModule } from 'ng2-charts';
 import { ChartDataset } from 'chart.js';
-
-
 import Chart from 'chart.js/auto';
-
 import { Router } from '@angular/router';
+import { UniversidadService } from '../../servicios/universidad.service';
 
 @Component({
   selector: 'app-usuario-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgChartsModule], // ✅ Agregar NgChartsModule
+  imports: [CommonModule, FormsModule, NgChartsModule],
   templateUrl: './usuario-dashboard.component.html',
   styleUrls: ['./usuario-dashboard.component.scss']
 })
 export class UsuarioDashboardComponent {
-  // Datos ingresados en el formulario
   datos = {
-    RANK_2025: null,
-    Academic_Reputation_Score: null,
-    Employer_Reputation_Score: null,
-    Sustainability_Score: null,
-    International_Research_Network_Score: null
+    RANK_2025: null as number | null,
+    Academic_Reputation_Score: null as number | null,
+    Employer_Reputation_Score: null as number | null,
+    Sustainability_Score: null as number | null,
+    International_Research_Network_Score: null as number | null
   };
 
-  // Listas de valores posibles
-  listaRankings: number[] = Array.from({ length: 200 }, (_, i) => i + 1); // 1 a 200
-  listaReputacionAcademica: number[] = Array.from({ length: 100 }, (_, i) => parseFloat((i + 1).toFixed(1))).reverse(); // 100.0 a 1.0
+  listaRankings: number[] = Array.from({ length: 200 }, (_, i) => i + 1);
+  listaReputacionAcademica: number[] = Array.from(
+    { length: 100 },
+    (_, i) => parseFloat((i + 1).toFixed(1))
+  ).reverse();
 
   resultado: number | null = null;
-  error: string = '';
+  error = '';
 
-  evaluacion: string = '';
+  evaluacion = '';
   percentil: number | null = null;
   universidadesComparables: string[] = [];
   universidadSimilar: any = null;
 
-
-  // Gráfico de barras con ng2-charts
-   chartData: ChartDataset<'bar'>[] = [];
+  chartData: ChartDataset<'bar'>[] = [];
 
   public chartOptions = {
     responsive: true,
@@ -59,23 +54,36 @@ export class UsuarioDashboardComponent {
     }
   };
 
-  constructor(private http: HttpClient, private router: Router) {}
+  preguntaSeleccionada = '';
+  respuestaPregunta: any[] = [];
 
- 
+  preguntasDisponibles: string[] = [
+    'mejor puntaje',
+    'mejor reputacion',
+    'mejor ranking',
+    'mejor red internacional',
+    'mas internacionales',
+    'mas citas',
+    'mejor empleabilidad',
+    'mas sostenible'
+  ];
 
+  constructor(
+    private universidadService: UniversidadService,
+    private router: Router
+  ) {}
 
-  predecir() {
-  this.error = '';
-  this.resultado = null;
+  predecir(): void {
+    this.error = '';
+    this.resultado = null;
 
-  this.http.post<any>('http://localhost:8080/api/universidad/prediccion', this.datos)
-    .subscribe({
-      next: (res) => {
+    this.universidadService.predecir(this.datos).subscribe({
+      next: (res: any) => {
         this.resultado = res.puntaje_estimado;
         this.evaluacion = res.evaluacion;
         this.percentil = res.percentil;
-        this.universidadesComparables = res.universidades_comparables;
-        this.universidadSimilar = res.universidad_similar;
+        this.universidadesComparables = res.universidades_comparables ?? [];
+        this.universidadSimilar = res.universidad_similar ?? null;
 
         const color = this.getColorByEvaluacion();
 
@@ -92,21 +100,32 @@ export class UsuarioDashboardComponent {
         this.dibujarGrafico();
       },
       error: (err) => {
+        console.error('Error en predicción:', err);
         this.error = err?.error?.detalle || 'Ocurrió un error en la predicción.';
       }
     });
-}
+  }
 
+  enviarPregunta(): void {
+    if (!this.preguntaSeleccionada.trim()) return;
 
+    this.universidadService.enviarPregunta(this.preguntaSeleccionada).subscribe({
+      next: (respuesta: any) => {
+        this.respuestaPregunta = Array.isArray(respuesta) ? respuesta : [respuesta];
+      },
+      error: (err) => {
+        console.error('Error al enviar pregunta:', err);
+      }
+    });
+  }
 
-  dibujarGrafico() {
-    const canvas = document.getElementById('graficoPrediccion') as HTMLCanvasElement;
-    if (!canvas) return;
+  dibujarGrafico(): void {
+    const canvas = document.getElementById('graficoPrediccion') as HTMLCanvasElement | null;
+    if (!canvas || this.resultado === null) return;
 
     const ctx = canvas.getContext('2d');
-    if (!ctx || this.resultado === null) return;
+    if (!ctx) return;
 
-    // Destruir gráfico anterior
     const prevChart = Chart.getChart('graficoPrediccion');
     if (prevChart) prevChart.destroy();
 
@@ -114,11 +133,13 @@ export class UsuarioDashboardComponent {
       type: 'doughnut',
       data: {
         labels: ['Score', 'Restante'],
-        datasets: [{
-          data: [this.resultado, 100 - this.resultado],
-          backgroundColor: ['#198754', '#e9ecef'],
-          borderWidth: 1
-        }]
+        datasets: [
+          {
+            data: [this.resultado, 100 - this.resultado],
+            backgroundColor: ['#198754', '#e9ecef'],
+            borderWidth: 1
+          }
+        ]
       },
       options: {
         cutout: '70%',
@@ -141,63 +162,25 @@ export class UsuarioDashboardComponent {
 
   getMensajeResultado(score: number): string {
     if (score >= 85) return 'Excelente rendimiento estimado';
-    else if (score >= 70) return 'Rendimiento aceptable';
-    else return 'Rendimiento bajo';
+    if (score >= 70) return 'Rendimiento aceptable';
+    return 'Rendimiento bajo';
   }
 
-  verUniversidades() {}
-
-
-
-
-  
-
-  // ================== 👇 LÓGICA DE PREGUNTAS AÑADIDA 👇 ==================
-
-  preguntaSeleccionada: string = '';
-  respuestaPregunta: any[] = [];
-
-  preguntasDisponibles: string[] = [
-    'mejor puntaje',
-    'mejor reputacion',
-    'mejor ranking',
-    'mejor red internacional',
-    'mas internacionales',
-    'mas citas',
-    'mejor empleabilidad',
-    'mas sostenible'
-  ];
-
-  enviarPregunta(): void {
-    if (!this.preguntaSeleccionada.trim()) return;
-
-    this.http.post<any[]>('http://localhost:8080/api/universidad/preguntas', { pregunta: this.preguntaSeleccionada }).subscribe({
-      next: (respuesta) => {
-        this.respuestaPregunta = respuesta;
-      },
-      error: (err) => {
-        console.error('Error al enviar pregunta:', err);
-      }
-    });
+  getColorByEvaluacion(): string {
+    if (this.resultado !== null) {
+      if (this.resultado >= 80) return 'rgba(75, 192, 192, 0.5)';
+      if (this.resultado >= 50) return 'rgba(255, 206, 86, 0.5)';
+      return 'rgba(255, 99, 132, 0.5)';
+    }
+    return 'rgba(201, 203, 207, 0.5)';
   }
 
-    cerrarSesion(): void {
+  verUniversidades(): void {}
+
+  cerrarSesion(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('rol');
     localStorage.removeItem('correo');
     this.router.navigate(['/login']);
   }
-
-
- getColorByEvaluacion(): string {
-  if (this.resultado !== null) {
-    if (this.resultado >= 80) return 'rgba(75, 192, 192, 0.5)';     // verde
-    if (this.resultado >= 50) return 'rgba(255, 206, 86, 0.5)';     // amarillo
-    return 'rgba(255, 99, 132, 0.5)';                                // rojo
-  }
-
-  // Color por defecto si no hay resultado
-  return 'rgba(201, 203, 207, 0.5)'; // gris claro
-}
-
 }

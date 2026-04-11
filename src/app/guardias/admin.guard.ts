@@ -6,12 +6,11 @@ export const adminGuard: CanActivateFn = (): boolean | UrlTree => {
   const router = inject(Router);
 
   const token = localStorage.getItem('token');
-  const rol = localStorage.getItem('rol');
+  const rol = localStorage.getItem('rol'); // ← contiene "ADMIN"
 
-  if (token && rol === 'ROLE_ADMIN') {  // ✅ ahora coincide
+  if (token && rol === 'ADMIN') {  // ← ✔️ coincide con lo guardado
     return true;
   }
 
   return router.parseUrl('/login');
 };
-

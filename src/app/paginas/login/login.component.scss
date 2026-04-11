@@ -1,48 +1,59 @@
-.login-container {
-  max-width: 400px;
-  margin: 80px auto;
-  padding: 20px;
-  background-color: #f8f8f8;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-image: url("/assets/imagen.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-h2 {
+/* Contenedor del login */
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  background-color: rgba(0, 0, 0, 0.6); /* fondo oscuro translúcido */
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+/* Título */
+.login-container h2 {
   text-align: center;
   margin-bottom: 20px;
+  color: #fff;
 }
 
-.form-group {
-  margin-bottom: 15px;
-}
-
+/* Inputs */
 input[type="email"],
 input[type="password"] {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: none;
+  border-radius: 6px;
+  margin-bottom: 15px;
 }
 
+/* Botón */
 button[type="submit"] {
   width: 100%;
-  background-color: #1976d2;
+  background-color: #00b894;
   color: white;
-  border: none;
   padding: 10px;
-  border-radius: 5px;
+  border: none;
+  border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
 }
 
-button[disabled] {
-  background-color: #aaa;
-  cursor: not-allowed;
-}
-
-.error {
-  color: red;
-  font-size: 0.9rem;
+/* Enlace */
+a {
+  color: #00cec9;
+  display: block;
   margin-top: 10px;
   text-align: center;
+  text-decoration: none;
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // ✅ Necesario para *ngFor, *ngIf
 import { UniversidadService } from '../../servicios/universidad.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-gestion-csv-universidades',
@@ -12,7 +13,7 @@ export class GestionCsvUniversidadesComponent implements OnInit {
   universidadesDesdeCSV: any[] = [];
   columnas: string[] = [];
 
-  constructor(private universidadService: UniversidadService) {}
+  constructor(private universidadService: UniversidadService,private location: Location) {}
 
   ngOnInit(): void {
     this.universidadService.obtenerDesdeCSV().subscribe({
@@ -26,5 +27,8 @@ export class GestionCsvUniversidadesComponent implements OnInit {
         console.error('Error al cargar CSV', err);
       }
     });
+  }
+  volverAtras(): void {
+    this.location.back(); // 👈 Esta es la función que va "para atrás"
   }
 }

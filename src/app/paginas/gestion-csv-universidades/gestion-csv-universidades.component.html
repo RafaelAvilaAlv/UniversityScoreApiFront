@@ -1,16 +1,30 @@
-<h2 class="mb-3">📄 Universidades desde CSV (solo lectura)</h2>
+<div class="container mt-5 p-4 bg-white rounded shadow">
+  <!-- Título y botón alineados -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="text-primary m-0">
+      📄 Universidades desde CSV <small class="text-muted">(solo lectura)</small>
+    </h3>
+    <button class="btn btn-outline-secondary" (click)="volverAtras()">🔙 Volver</button>
+  </div>
 
-<table class="table table-bordered table-sm" *ngIf="universidadesDesdeCSV.length > 0">
-  <thead class="table-light">
-    <tr>
-      <th *ngFor="let col of columnas">{{ col }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let uni of universidadesDesdeCSV">
-      <td *ngFor="let col of columnas">{{ uni[col] }}</td>
-    </tr>
-  </tbody>
-</table>
+  <!-- Tabla de universidades -->
+  <div *ngIf="universidadesDesdeCSV.length > 0" class="table-responsive">
+    <table class="table table-hover table-bordered table-striped align-middle text-center">
+      <thead class="table-primary">
+        <tr>
+          <th *ngFor="let col of columnas">{{ col }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let uni of universidadesDesdeCSV">
+          <td *ngFor="let col of columnas">{{ uni[col] }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-<p *ngIf="universidadesDesdeCSV.length === 0">Cargando datos desde CSV...</p>
+  <!-- Mensaje de carga -->
+  <div *ngIf="universidadesDesdeCSV.length === 0" class="alert alert-info text-center mt-4">
+    ⏳ Cargando datos desde CSV...
+  </div>
+</div>

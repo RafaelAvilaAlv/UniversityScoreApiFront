@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiURL = 'http://localhost:8080/api/user';
+  private apiURL = environment.userApi;
+  private authURL = environment.authApi;
 
   private tokenSubject = new BehaviorSubject<string | null>(null);
   private rolSubject = new BehaviorSubject<string | null>(null);
@@ -25,14 +28,18 @@ export class AuthService {
   }
 
   login(credenciales: any): Observable<any> {
-    return this.http.post('http://localhost:8080/api/auth/login', credenciales).pipe(
+    return this.http.post(`${this.authURL}/login`, credenciales).pipe(
       tap((respuesta: any) => {
+        const decoded: any = jwtDecode(respuesta.token);
+        const rol = decoded.rol;
+
         if (typeof window !== 'undefined') {
           localStorage.setItem('token', respuesta.token);
-          localStorage.setItem('rol', respuesta.rol);
+          localStorage.setItem('rol', rol);
         }
+
         this.tokenSubject.next(respuesta.token);
-        this.rolSubject.next(respuesta.rol);
+        this.rolSubject.next(rol);
       })
     );
   }
@@ -56,16 +63,7 @@ export class AuthService {
   }
 
   obtenerRol(): string | null {
-    const token = localStorage.getItem('token');
-    if (!token) return null;
-
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.rol || null;
-    } catch (error) {
-      console.error('Error al decodificar el token', error);
-      return null;
-    }
+    return this.rolSubject.value || localStorage.getItem('rol');
   }
 
   cerrarSesion(): void {
@@ -88,6 +86,7 @@ export class AuthService {
       const ahora = Math.floor(Date.now() / 1000);
       return payload.exp && payload.exp > ahora;
     } catch (error) {
+      console.error('Token inválido', error);
       return false;
     }
   }

@@ -3,7 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts'; // ✅ Importar módulo de gráficos
+
+import { ChartDataset } from 'chart.js';
+
+
 import Chart from 'chart.js/auto';
+
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-usuario-dashboard',
@@ -36,9 +42,8 @@ export class UsuarioDashboardComponent {
 
 
   // Gráfico de barras con ng2-charts
-  public chartData = [
-    { data: [0], label: 'Overall Score' }
-  ];
+   chartData: ChartDataset<'bar'>[] = [];
+
   public chartOptions = {
     responsive: true,
     plugins: {
@@ -54,7 +59,10 @@ export class UsuarioDashboardComponent {
     }
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
+
+ 
+
 
   predecir() {
   this.error = '';
@@ -69,8 +77,16 @@ export class UsuarioDashboardComponent {
         this.universidadesComparables = res.universidades_comparables;
         this.universidadSimilar = res.universidad_similar;
 
+        const color = this.getColorByEvaluacion();
+
         this.chartData = [
-          { data: [this.resultado ?? 0], label: 'Predicción' }
+          {
+            data: [this.resultado ?? 0],
+            label: 'Predicción',
+            backgroundColor: color,
+            borderColor: color,
+            borderWidth: 1
+          }
         ];
 
         this.dibujarGrafico();
@@ -80,6 +96,7 @@ export class UsuarioDashboardComponent {
       }
     });
 }
+
 
 
   dibujarGrafico() {
@@ -163,4 +180,24 @@ export class UsuarioDashboardComponent {
       }
     });
   }
+
+    cerrarSesion(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('rol');
+    localStorage.removeItem('correo');
+    this.router.navigate(['/login']);
+  }
+
+
+ getColorByEvaluacion(): string {
+  if (this.resultado !== null) {
+    if (this.resultado >= 80) return 'rgba(75, 192, 192, 0.5)';     // verde
+    if (this.resultado >= 50) return 'rgba(255, 206, 86, 0.5)';     // amarillo
+    return 'rgba(255, 99, 132, 0.5)';                                // rojo
+  }
+
+  // Color por defecto si no hay resultado
+  return 'rgba(201, 203, 207, 0.5)'; // gris claro
+}
+
 }

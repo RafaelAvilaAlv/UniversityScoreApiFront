@@ -1,16 +1,32 @@
-<div class="admin-container">
-  <h1>Bienvenido, administrador</h1>
-  <p *ngIf="nombreAdmin">Has iniciado sesión como: <strong>{{ nombreAdmin }}</strong></p>
+<div class="container d-flex justify-content-center mt-5">
+  <div class="admin-card">
 
-  <div class="acciones d-grid gap-2 col-6 mx-auto mt-4">
-    <a class="btn btn-primary" routerLink="/admin/csv-universidades">Ver universidades (CSV)</a>
-    <a class="btn btn-primary" routerLink="/admin/gestionar-universidades">Gestionar Universidades</a>
-    
+<div class="container d-flex justify-content-center mt-5">
+  <div class="bg-white p-4 rounded shadow-lg border" style="width: 100%; max-width: 500px;">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold text-dark mb-2">👨‍💼 Bienvenido, administrador</h2>
+      <p *ngIf="nombreAdmin" class="text-muted mb-0">
+        Has iniciado sesión como: <strong class="text-primary">{{ nombreAdmin }}</strong>
+      </p>
+    </div>
 
-
-   <!-- ✅ Esto sí funciona -->
-<a class="btn btn-primary btn-block" routerLink="/admin/usuarios">Ver Usuarios</a>
-
-   <button class="btn btn-secondary" (click)="cerrarSesion()">Cerrar Sesión</button>
+    <!-- Botones normales -->
+    <div class="d-grid gap-2">
+      <a class="btn btn-primary py-2" routerLink="/admin/csv-universidades">
+        📄 Ver universidades (CSV)
+      </a>
+      <a class="btn btn-success py-2" routerLink="/admin/gestionar-universidades">
+        🏫 Gestionar Universidades
+      </a>
+      <a class="btn btn-info py-2 text-white" routerLink="/admin/usuarios">
+        👥 Ver Usuarios
+      </a>
+      <button class="btn btn-danger py-2" (click)="cerrarSesion()">
+        Cerrar Sesión
+      </button>
+    </div>
   </div>
+</div>
+
+ </div>
 </div>

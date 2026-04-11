@@ -35,18 +35,17 @@ export class LoginComponent {
 
   this.authService.login(credenciales).subscribe({
     next: (respuesta) => {
-      // ✅ Guarda el token
       this.authService.guardarToken(respuesta.token);
 
-      // ✅ Decodifica el token para extraer el rol
       const decoded: any = jwtDecode(respuesta.token);
       const rol = decoded.rol;
 
-      // ✅ Redirección según el rol
-      if (rol === 'ADMIN' || rol === 'ROLE_ADMIN') {
+      this.authService.guardarRol(rol);
+
+      if (rol === 'ADMIN') {
         this.router.navigate(['/admin/dashboard']);
       } else {
-        this.router.navigate(['/usuario/dashboard']); // 🔴 CORREGIDO
+        this.router.navigate(['/usuario/dashboard']);
       }
     },
     error: () => {

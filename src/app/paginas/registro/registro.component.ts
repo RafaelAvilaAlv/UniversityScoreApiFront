@@ -1,5 +1,12 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  Validators,
+  FormGroup,
+  AbstractControl,
+  ValidationErrors,
+  ReactiveFormsModule
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../servicios/auth.service';
@@ -14,59 +21,93 @@ import Swal from 'sweetalert2';
 })
 export class RegistroComponent implements AfterViewInit {
   formularioRegistro: FormGroup;
-  mensajeError: string = '';
+  mensajeError = '';
+  cargando = false;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService
   ) {
-    this.formularioRegistro = this.fb.group({
-      nombreUsuario: ['', Validators.required],
-      correo: ['', [Validators.required, Validators.email]],
-      clave: ['', [
-        Validators.required,
-        Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/)
-      ]],
-      confirmarClave: ['', Validators.required]
-    }, { validators: this.validarClavesIguales });
+    this.formularioRegistro = this.fb.group(
+      {
+        nombreUsuario: ['', [Validators.required, Validators.minLength(3)]],
+        correo: ['', [Validators.required, Validators.email]],
+        clave: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/)
+          ]
+        ],
+        confirmarClave: ['', [Validators.required]]
+      },
+      { validators: this.validarClavesIguales }
+    );
   }
 
   ngAfterViewInit(): void {
-    // Inicialización de DOM si se requiere
+    // Si luego necesitas lógica visual o de DOM, aquí va.
   }
 
-  // Validación cruzada: verificar que las claves coincidan
   validarClavesIguales(control: AbstractControl): ValidationErrors | null {
     const clave = control.get('clave')?.value;
     const confirmar = control.get('confirmarClave')?.value;
+
+    if (!clave || !confirmar) {
+      return null;
+    }
+
     return clave === confirmar ? null : { clavesDiferentes: true };
   }
 
-  registrar() {
-    if (this.formularioRegistro.invalid) return;
+  get nombreUsuario() {
+    return this.formularioRegistro.get('nombreUsuario');
+  }
 
-    const { nombreUsuario, correo, clave, confirmarClave } = this.formularioRegistro.value;
+  get correo() {
+    return this.formularioRegistro.get('correo');
+  }
 
-    if (clave !== confirmarClave) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Las contraseñas no coinciden',
-        confirmButtonText: 'Ok'
-      });
+  get clave() {
+    return this.formularioRegistro.get('clave');
+  }
+
+  get confirmarClave() {
+    return this.formularioRegistro.get('confirmarClave');
+  }
+
+  registrar(): void {
+    this.mensajeError = '';
+
+    if (this.formularioRegistro.invalid) {
+      this.formularioRegistro.markAllAsTouched();
+
+      if (this.formularioRegistro.hasError('clavesDiferentes')) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Las contraseñas no coinciden',
+          confirmButtonText: 'Ok'
+        });
+      }
+
       return;
     }
 
-    // ✅ Objeto adaptado al backend
+    const { nombreUsuario, correo, clave } = this.formularioRegistro.value;
+
     const usuario = {
-      nombreUsuario: nombreUsuario,
-      correo: correo,
-      contrasena: clave // 🔁 campo exacto esperado por el backend
-      // No se incluye el campo "rol"
+      nombreUsuario,
+      correo,
+      contrasena: clave
     };
+
+    this.cargando = true;
 
     this.authService.register(usuario).subscribe({
       next: () => {
+        this.cargando = false;
+
         Swal.fire({
           icon: 'success',
           title: '¡Registro exitoso!',
@@ -77,11 +118,18 @@ export class RegistroComponent implements AfterViewInit {
         });
       },
       error: (error) => {
-        console.error(error);
+        this.cargando = false;
+        console.error('Error al registrar usuario:', error);
+
+        this.mensajeError =
+          error?.error?.mensaje ||
+          error?.error?.error ||
+          'No se pudo completar el registro. Intenta nuevamente.';
+
         Swal.fire({
           icon: 'error',
           title: 'Error al registrar',
-          text: 'Intenta nuevamente.',
+          text: this.mensajeError,
           confirmButtonText: 'Cerrar'
         });
       }

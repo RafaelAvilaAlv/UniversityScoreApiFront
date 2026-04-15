@@ -1,59 +1,190 @@
+/* 🔥 FONDO GENERAL (imagen) */
 :host {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block;
   min-height: 100vh;
-  background-image: url("/assets/imagen.png");
+
+  background-image: url('/universidad.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-/* Contenedor del login */
-.login-container {
-  width: 100%;
-  max-width: 400px;
-  background-color: rgba(0, 0, 0, 0.6); /* fondo oscuro translúcido */
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  color: #fff;
+/* 🔥 CAPA OSCURA + BLUR (encima del fondo) */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+
+  /* 💎 capa elegante */
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
 }
 
-/* Título */
-.login-container h2 {
+/* 🔥 CONTENEDOR PRINCIPAL */
+.login-wrapper {
+  width: 100%;
+  max-width: 980px;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* 🔥 TARJETAS */
+.login-card,
+.demo-card {
+  border-radius: 20px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* 🔥 LOGIN */
+.login-card {
+  background: rgba(55, 65, 81, 0.92);
+  color: #fff;
+  padding: 36px 32px;
+}
+
+/* 🔥 DEMO */
+.demo-card {
+  background: rgba(255, 255, 255, 0.95);
+  color: #1f2937;
+  padding: 28px 24px;
+}
+
+/* 🔥 HEADER */
+.login-header {
+  margin-bottom: 24px;
+}
+
+.login-header h2 {
+  margin: 0 0 10px;
   text-align: center;
-  margin-bottom: 20px;
-  color: #fff;
+  font-size: 2.3rem;
+  font-weight: 800;
 }
 
-/* Inputs */
-input[type="email"],
-input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  margin-bottom: 15px;
+.server-warning {
+  text-align: center;
+  color: #dbeafe;
+  font-size: 0.95rem;
 }
 
-/* Botón */
-button[type="submit"] {
-  width: 100%;
-  background-color: #00b894;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
+/* 🔥 FORM */
+.form-group {
+  margin-bottom: 18px;
 }
 
-/* Enlace */
-a {
-  color: #00cec9;
+.form-group label {
   display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #eef2ff;
+  color: #111;
+  transition: 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.25);
+  background: white;
+}
+
+/* 🔥 BOTÓN */
+button[type='submit'] {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  background: linear-gradient(135deg, #00b894, #00a383);
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 184, 148, 0.3);
+}
+
+/* 🔥 TEXTO REGISTRO */
+.registro-text {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.registro-text a {
+  color: #22d3ee;
+  font-weight: bold;
+}
+
+/* 🔥 ERROR */
+.error {
   margin-top: 10px;
   text-align: center;
-  text-decoration: none;
+  color: #ffb4b4;
+}
+
+/* 🔥 DEMO CARD */
+.demo-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.demo-credentials {
+  background: #f9fafb;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.credential-line {
+  font-weight: bold;
+}
+
+.demo-divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 15px 0;
+}
+
+/* 🔥 RESPONSIVE */
+@media (max-width: 900px) {
+  .login-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .demo-card {
+    order: -1;
+  }
+}
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background-image: url('/universidad.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  background: rgba(15, 23, 42, 0.38);
+  backdrop-filter: blur(2px);
 }

@@ -1,35 +1,79 @@
-<div class="login-container">
-  <h2>Iniciar Sesión</h2>
+<div class="login-page">
+  <div class="login-wrapper">
+    <div class="login-card">
+      <div class="login-header">
+        <h2>Iniciar Sesión</h2>
+        <p class="server-warning">
+          El servidor puede tardar unos segundos en responder si está inactivo.
+        </p>
+      </div>
 
-  <p class="server-warning">
-    El servidor puede tardar unos segundos en responder si está inactivo.
-  </p>
+      <form [formGroup]="formularioLogin" (ngSubmit)="iniciarSesion()" class="login-form">
+        <div class="form-group">
+          <label for="correo">Correo</label>
+          <input
+            id="correo"
+            type="email"
+            formControlName="correo"
+            placeholder="ejemplo@correo.com"
+            autocomplete="email"
+          />
+          <small
+            *ngIf="formularioLogin.get('correo')?.touched && formularioLogin.get('correo')?.invalid"
+            class="field-error"
+          >
+            Ingresa un correo válido.
+          </small>
+        </div>
 
-  <form [formGroup]="formularioLogin" (ngSubmit)="iniciarSesion()">
-    <!-- Campo de correo -->
-    <div class="form-group">
-      <label for="correo">Correo:</label>
-      <input id="correo" type="email" formControlName="correo" placeholder="ejemplo@correo.com" required />
+        <div class="form-group">
+          <label for="contrasena">Contraseña</label>
+          <input
+            id="contrasena"
+            type="password"
+            formControlName="contrasena"
+            placeholder="Tu contraseña"
+            autocomplete="current-password"
+          />
+          <small
+            *ngIf="formularioLogin.get('contrasena')?.touched && formularioLogin.get('contrasena')?.invalid"
+            class="field-error"
+          >
+            La contraseña es obligatoria.
+          </small>
+        </div>
+
+        <button type="submit" [disabled]="formularioLogin.invalid || cargando">
+          {{ cargando ? 'Ingresando...' : 'Ingresar' }}
+        </button>
+
+        <p class="registro-text">
+          ¿No tienes cuenta?
+          <a [routerLink]="['/registro']">Regístrate aquí</a>
+        </p>
+      </form>
+
+      <p *ngIf="mensajeError" class="error">{{ mensajeError }}</p>
     </div>
 
-    <!-- Campo de contraseña -->
-    <div class="form-group">
-      <label for="contrasena">Contraseña:</label>
-      <input id="contrasena" type="password" formControlName="contrasena" placeholder="Tu contraseña" required />
+    <div class="demo-card">
+      <h3>Acceso de demostración</h3>
+      <p class="demo-subtitle">
+        Prueba la aplicación con un usuario administrador o crea tu propia cuenta.
+      </p>
+
+      <div class="demo-credentials">
+        <p><strong>Admin:</strong></p>
+        <p class="credential-line">admin&#64;gmail.com</p>
+        <p class="credential-line">admin123</p>
+      </div>
+
+      <div class="demo-divider"></div>
+
+      <p class="demo-text">
+        También puedes registrarte directamente en la aplicación para ingresar como
+        usuario y probar las consultas de rankings, estadísticas y predicciones universitarias.
+      </p>
     </div>
-
-    <!-- Botón de ingreso -->
-    <button type="submit" [disabled]="formularioLogin.invalid">
-      Ingresar
-    </button>
-
-    <!-- Enlace a registro -->
-    <p class="registro-text">
-      ¿No tienes cuenta?
-      <a [routerLink]="['/registro']">Regístrate aquí</a>
-    </p>
-  </form>
-
-  <!-- Mensaje de error -->
-  <p *ngIf="mensajeError" class="error">{{ mensajeError }}</p>
+  </div>
 </div>

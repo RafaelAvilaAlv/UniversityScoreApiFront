@@ -1,32 +1,53 @@
-<div class="container d-flex justify-content-center mt-5">
-  <div class="admin-card">
+<div class="admin-dashboard-page">
+  <div class="dashboard-overlay"></div>
 
-<div class="container d-flex justify-content-center mt-5">
-  <div class="bg-white p-4 rounded shadow-lg border" style="width: 100%; max-width: 500px;">
-    <div class="text-center mb-4">
-      <h2 class="fw-bold text-dark mb-2">👨‍💼 Bienvenido, administrador</h2>
-      <p *ngIf="nombreAdmin" class="text-muted mb-0">
-        Has iniciado sesión como: <strong class="text-primary">{{ nombreAdmin }}</strong>
-      </p>
-    </div>
+  <div class="dashboard-wrapper">
+    <div class="dashboard-card">
+      <div class="dashboard-header">
+        <div class="avatar-circle">👨‍💼</div>
 
-    <!-- Botones normales -->
-    <div class="d-grid gap-2">
-      <a class="btn btn-primary py-2" routerLink="/admin/csv-universidades">
-        📄 Ver universidades (CSV)
-      </a>
-      <a class="btn btn-success py-2" routerLink="/admin/gestionar-universidades">
-        🏫 Gestionar Universidades
-      </a>
-      <a class="btn btn-info py-2 text-white" routerLink="/admin/usuarios">
-        👥 Ver Usuarios
-      </a>
-      <button class="btn btn-danger py-2" (click)="cerrarSesion()">
-        Cerrar Sesión
-      </button>
+        <div>
+          <h1>Panel de Administración</h1>
+          <p class="subtitle">
+            Bienvenido al centro de control del sistema
+          </p>
+        </div>
+      </div>
+
+      <div class="admin-info">
+        <h2>Bienvenido, administrador</h2>
+
+        <p *ngIf="nombreAdmin" class="admin-email">
+          Has iniciado sesión como:
+          <span>{{ nombreAdmin }}</span>
+        </p>
+      </div>
+
+      <div class="dashboard-actions">
+        <a class="action-card primary" routerLink="/admin/csv-universidades">
+          <div class="icon">📄</div>
+          <div class="content">
+            <h3>Ver universidades</h3>
+            <p>Consulta y revisa el archivo CSV cargado en el sistema.</p>
+          </div>
+        </a>
+
+      
+
+        <a class="action-card info" routerLink="/admin/usuarios">
+          <div class="icon">👥</div>
+          <div class="content">
+            <h3>Ver usuarios</h3>
+            <p>Consulta los usuarios registrados dentro de la plataforma.</p>
+          </div>
+        </a>
+      </div>
+
+      <div class="dashboard-footer">
+        <button class="logout-btn" (click)="cerrarSesion()">
+          Cerrar sesión
+        </button>
+      </div>
     </div>
   </div>
-</div>
-
- </div>
 </div>

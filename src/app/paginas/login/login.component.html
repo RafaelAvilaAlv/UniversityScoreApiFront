@@ -11,34 +11,20 @@
       <form [formGroup]="formularioLogin" (ngSubmit)="iniciarSesion()" class="login-form">
         <div class="form-group">
           <label for="correo">Correo</label>
-          <input
-            id="correo"
-            type="email"
-            formControlName="correo"
-            placeholder="ejemplo@correo.com"
-            autocomplete="email"
-          />
-          <small
-            *ngIf="formularioLogin.get('correo')?.touched && formularioLogin.get('correo')?.invalid"
-            class="field-error"
-          >
+          <input id="correo" type="email" formControlName="correo" placeholder="ejemplo@correo.com"
+            autocomplete="email" />
+          <small *ngIf="formularioLogin.get('correo')?.touched && formularioLogin.get('correo')?.invalid"
+            class="field-error">
             Ingresa un correo válido.
           </small>
         </div>
 
         <div class="form-group">
           <label for="contrasena">Contraseña</label>
-          <input
-            id="contrasena"
-            type="password"
-            formControlName="contrasena"
-            placeholder="Tu contraseña"
-            autocomplete="current-password"
-          />
-          <small
-            *ngIf="formularioLogin.get('contrasena')?.touched && formularioLogin.get('contrasena')?.invalid"
-            class="field-error"
-          >
+          <input id="contrasena" type="password" formControlName="contrasena" placeholder="Tu contraseña"
+            autocomplete="current-password" />
+          <small *ngIf="formularioLogin.get('contrasena')?.touched && formularioLogin.get('contrasena')?.invalid"
+            class="field-error">
             La contraseña es obligatoria.
           </small>
         </div>
@@ -57,13 +43,14 @@
     </div>
 
     <div class="demo-card">
-      <h3>Acceso de demostración</h3>
+      <h3>University Score</h3>
       <p class="demo-subtitle">
-        Prueba la aplicación con un usuario administrador o crea tu propia cuenta.
+        Plataforma inteligente para el análisis y predicción del rendimiento universitario basada en indicadores
+        académicos globales.
       </p>
 
       <div class="demo-credentials">
-        <p><strong>Admin:</strong></p>
+        <p><strong>Acceso de demostración:</strong></p>
         <p class="credential-line">admin&#64;gmail.com</p>
         <p class="credential-line">admin123</p>
       </div>
@@ -71,8 +58,11 @@
       <div class="demo-divider"></div>
 
       <p class="demo-text">
-        También puedes registrarte directamente en la aplicación para ingresar como
-        usuario y probar las consultas de rankings, estadísticas y predicciones universitarias.
+        Esta aplicación permite analizar métricas como reputación académica, empleabilidad, investigación y
+        sostenibilidad para generar predicciones de puntaje universitario.
+        <br><br>
+        Puedes iniciar sesión como administrador o registrarte para explorar estadísticas, rankings y comparaciones
+        entre universidades a nivel global.
       </p>
     </div>
   </div>

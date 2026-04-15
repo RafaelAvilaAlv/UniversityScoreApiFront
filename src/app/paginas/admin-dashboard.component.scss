@@ -1,0 +1,244 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.admin-dashboard-page {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 35%, #c7d2fe 100%);
+  padding: 40px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.08);
+}
+
+.dashboard-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.dashboard-card {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 28px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.16);
+  padding: 32px;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 26px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.avatar-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #38bdf8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.28);
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: #475569;
+  font-size: 1rem;
+}
+
+.admin-info {
+  text-align: left;
+  margin-bottom: 28px;
+}
+
+.admin-info h2 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.admin-email {
+  margin: 0;
+  color: #475569;
+  font-size: 1rem;
+}
+
+.admin-email span {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.dashboard-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.action-card {
+  text-decoration: none;
+  border-radius: 22px;
+  padding: 22px 20px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 14px;
+  transition: all 0.28s ease;
+  border: 1px solid transparent;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.action-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.14);
+}
+
+.action-card .icon {
+  font-size: 2rem;
+}
+
+.action-card .content h3 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.action-card .content p {
+  margin: 0;
+  line-height: 1.6;
+  font-size: 0.96rem;
+}
+
+.action-card.primary {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border-color: #93c5fd;
+}
+
+.action-card.primary h3 {
+  color: #1d4ed8;
+}
+
+.action-card.primary p {
+  color: #334155;
+}
+
+.action-card.success {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  border-color: #6ee7b7;
+}
+
+.action-card.success h3 {
+  color: #047857;
+}
+
+.action-card.success p {
+  color: #334155;
+}
+
+.action-card.info {
+  background: linear-gradient(135deg, #ecfeff, #cffafe);
+  border-color: #67e8f9;
+}
+
+.action-card.info h3 {
+  color: #0f766e;
+}
+
+.action-card.info p {
+  color: #334155;
+}
+
+.dashboard-footer {
+  margin-top: 28px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.logout-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 22px;
+  font-weight: 800;
+  font-size: 0.96rem;
+  cursor: pointer;
+  transition: all 0.28s ease;
+  box-shadow: 0 10px 22px rgba(220, 38, 38, 0.24);
+}
+
+.logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(220, 38, 38, 0.3);
+}
+
+@media (max-width: 900px) {
+  .dashboard-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-card {
+    padding: 24px;
+  }
+
+  .dashboard-header {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-dashboard-page {
+    padding: 20px 12px;
+  }
+
+  .dashboard-card {
+    padding: 20px 16px;
+    border-radius: 22px;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .admin-info {
+    text-align: center;
+  }
+
+  .dashboard-footer {
+    justify-content: center;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .admin-info h2 {
+    font-size: 1.25rem;
+  }
+}

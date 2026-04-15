@@ -1,96 +1,184 @@
 :host {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block;
   min-height: 100vh;
-  background-image: url("/assets/imagen.png");
+}
+
+.registro-page {
+  position: relative;
+  min-height: 100vh;
+
+  background: linear-gradient(
+      rgba(15, 23, 42, 0.75),
+      rgba(15, 23, 42, 0.75)
+    ),
+    url('/registro.jpg'); /* 👈 AQUÍ EL CAMBIO */
+
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-}
 
-.registro-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 32px 16px;
+}
+
+.registro-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.68);
+  backdrop-filter: blur(4px);
+}
+
+.registro-wrapper {
+  position: relative;
+  z-index: 1;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .registro-card {
-  background: rgba(0, 0, 0, 0.6); /* fondo translúcido oscuro */
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   width: 100%;
-  max-width: 420px;
-  color: #fff;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 22px;
+  padding: 32px 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  color: #ffffff;
 }
 
 h2 {
   text-align: center;
-  margin-bottom: 1.5rem;
-  color: #fff;
+  margin: 0 0 12px;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.server-warning {
+  font-size: 0.98rem;
+  color: #dbeafe;
+  margin-bottom: 24px;
+  text-align: center;
+  line-height: 1.5;
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 18px;
 
   label {
     display: block;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    color: #f1f1f1;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #f8fafc;
+    font-size: 1rem;
   }
 
   input {
     width: 100%;
-    padding: 0.6rem;
-    border: none;
-    border-radius: 6px;
+    padding: 14px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
     font-size: 1rem;
-    background-color: #e9f0ff;
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    outline: none;
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    &:focus {
+      border-color: #67e8f9;
+      background: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.18);
+    }
   }
 
   small {
-    color: #ffbaba;
+    color: #fecaca;
     font-size: 0.85rem;
-    margin-top: 0.25rem;
+    margin-top: 8px;
     display: block;
+    line-height: 1.4;
   }
 }
 
 button {
   width: 100%;
-  padding: 0.75rem;
-  background-color: #00b894;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #4fd1c5, #38b2ac);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 14px;
   font-size: 1rem;
-  font-weight: bold;
+  font-weight: 800;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  margin-top: 8px;
 
   &:disabled {
-    background-color: rgba(0, 184, 148, 0.4); /* versión atenuada del verde */
+    background: rgba(79, 209, 197, 0.4);
     cursor: not-allowed;
   }
 
   &:hover:not(:disabled) {
-    background-color: #019875;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(56, 178, 172, 0.35);
   }
 }
 
-.server-warning {
-  font-size: 0.9rem;
-  color: #555;
-  margin-bottom: 1rem;
-  text-align: center;
+.error-text {
+  color: #fecaca;
 }
 
-.error-text {
-  color: #dc3545;
-  font-size: 0.85rem;
-  display: block;
-  margin-top: 0.25rem;
+.mensaje-global {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 0.92rem;
+}
+
+@media (max-width: 600px) {
+  .registro-page {
+    padding: 20px 12px;
+  }
+
+  .registro-card {
+    padding: 24px 18px;
+    border-radius: 18px;
+  }
+
+  h2 {
+    font-size: 1.9rem;
+  }
+
+  .server-warning {
+    font-size: 0.92rem;
+  }
+}
+
+
+.back-login {
+  margin-top: 18px;
+  text-align: center;
+
+  a {
+    color: #67e8f9;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+
+    &:hover {
+      text-decoration: underline;
+      color: #22d3ee;
+    }
+  }
 }

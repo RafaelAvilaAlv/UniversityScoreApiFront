@@ -1,27 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-
-import { RouterModule } from '@angular/router';  // ✅ IMPORTANTE
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
- imports: [CommonModule, FormsModule, RouterModule], // ✅ Agrega esto
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss']
 })
-export class AdminDashboardComponent {
+export class AdminDashboardComponent implements OnInit {
   nombreAdmin: string | null = '';
 
-   constructor(private router: Router) {}
+  constructor(private router: Router) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     const token = localStorage.getItem('token');
+
     if (token) {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      this.nombreAdmin = payload.sub; // o payload.nombreUsuario si así lo generaste
+      this.nombreAdmin = payload.sub;
     }
   }
 

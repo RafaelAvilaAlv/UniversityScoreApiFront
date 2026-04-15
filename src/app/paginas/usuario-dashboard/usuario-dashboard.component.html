@@ -1,134 +1,210 @@
-<div class="container mt-4 d-flex justify-content-center">
-  <div style="width: 100%; max-width: 800px;">
+<div class="dashboard-overlay">
+  
+  <!-- TODO tu contenido actual -->
+  
+<div class="usuario-dashboard-page">
+  <div class="dashboard-overlay"></div>
 
-    <!-- Encabezado: Título + Cerrar Sesión -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="m-0">🎓 Panel del Usuario</h2>
-      <button class="btn btn-danger btn-sm d-flex align-items-center gap-2 shadow-sm" (click)="cerrarSesion()">
-        <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+  <div class="dashboard-wrapper">
+    <!-- HEADER -->
+    <div class="dashboard-topbar">
+      <div class="title-block">
+        <div class="icon-circle">🎓</div>
+        <div>
+          <h1>Panel del Usuario</h1>
+          <p>Predicción académica y consultas rápidas del sistema</p>
+        </div>
+      </div>
+
+      <button class="logout-btn" (click)="cerrarSesion()">
+        Cerrar sesión
       </button>
     </div>
 
-    <div class="alert alert-info py-2 mb-3">
+    <!-- ALERTA -->
+    <div class="server-alert">
       El servidor puede tardar unos segundos en responder si estuvo inactivo.
     </div>
 
-    <!-- Sección: Formulario de Predicción -->
-    <fieldset class="prediccion-form border p-4 rounded shadow-sm bg-white mb-4">
-      <legend class="float-none w-auto px-3">🔢 Predicción de Puntaje QS</legend>
+    <!-- PREDICCIÓN -->
+    <section class="dashboard-card">
+      <div class="card-header">
+        <h2>🔢 Predicción de Puntaje QS</h2>
+        <p>Completa los indicadores para estimar el puntaje global.</p>
+      </div>
 
-      <form (ngSubmit)="predecir()" #formulario="ngForm">
-        <div class="row">
-          <div class="col-md-6 mb-3">
+      <form (ngSubmit)="predecir()" #formulario="ngForm" class="prediction-form">
+        <div class="form-grid">
+          <div class="form-group">
             <label>Ranking 2025</label>
-            <select class="form-control" [(ngModel)]="datos.RANK_2025" name="rank" required>
-              <option value="" disabled selected>Seleccione un ranking</option>
-              <option *ngFor="let rank of listaRankings" [value]="rank">{{ rank }}</option>
+            <select
+              class="custom-input"
+              [(ngModel)]="datos.RANK_2025"
+              name="rank"
+              required
+            >
+              <option [ngValue]="null" disabled>Seleccione un ranking</option>
+              <option *ngFor="let rank of listaRankings" [ngValue]="rank">
+                {{ rank }}
+              </option>
             </select>
           </div>
-          <div class="col-md-6 mb-3">
+
+          <div class="form-group">
             <label>Reputación académica</label>
-            <select class="form-control" [(ngModel)]="datos.Academic_Reputation_Score" name="academic" required>
-              <option *ngFor="let valor of listaReputacionAcademica" [value]="valor">{{ valor }}</option>
+            <select
+              class="custom-input"
+              [(ngModel)]="datos.Academic_Reputation_Score"
+              name="academic"
+              required
+            >
+              <option [ngValue]="null" disabled>Seleccione un valor</option>
+              <option *ngFor="let valor of listaReputacionAcademica" [ngValue]="valor">
+                {{ valor }}
+              </option>
             </select>
           </div>
-          <div class="col-md-6 mb-3">
+
+          <div class="form-group">
             <label>Reputación del empleador</label>
-            <input type="number" class="form-control" min="0" max="100" [(ngModel)]="datos.Employer_Reputation_Score"
-              name="employer" required>
+            <input
+              type="number"
+              class="custom-input"
+              min="0"
+              max="100"
+              [(ngModel)]="datos.Employer_Reputation_Score"
+              name="employer"
+              required
+              placeholder="Ej: 75"
+            />
           </div>
-          <div class="col-md-6 mb-3">
+
+          <div class="form-group">
             <label>Sostenibilidad</label>
-            <input type="number" class="form-control" min="0" max="100" [(ngModel)]="datos.Sustainability_Score"
-              name="sustainability" required>
+            <input
+              type="number"
+              class="custom-input"
+              min="0"
+              max="100"
+              [(ngModel)]="datos.Sustainability_Score"
+              name="sustainability"
+              required
+              placeholder="Ej: 68"
+            />
           </div>
-          <div class="col-md-12 mb-3">
+
+          <div class="form-group full-width">
             <label>Red internacional de investigación</label>
-            <input type="number" class="form-control" min="0" max="100"
-              [(ngModel)]="datos.International_Research_Network_Score" name="network" required>
+            <input
+              type="number"
+              class="custom-input"
+              min="0"
+              max="100"
+              [(ngModel)]="datos.International_Research_Network_Score"
+              name="network"
+              required
+              placeholder="Ej: 80"
+            />
           </div>
         </div>
 
-        <div class="text-center">
-          <button type="submit" class="btn btn-success">Predecir</button>
+        <div class="form-actions">
+          <button type="submit" class="predict-btn">
+            Predecir
+          </button>
         </div>
       </form>
-    </fieldset>
+    </section>
 
-    <!-- Resultados de Predicción -->
-    <div class="row prediccion-resultados g-3" *ngIf="resultado !== null">
-      <!-- Resultado -->
-      <div class="col-md-6 mb-3">
-        <div class="card p-4 text-white shadow-sm h-100" [ngClass]="obtenerColorResultado()"
-          style="border-radius: 10px;">
-          <h5 class="mb-2">🎯 Resultado de la predicción:</h5>
-          <p class="display-6 fw-bold m-0">{{ resultado }}</p>
-          <p class="m-0">{{ evaluacion }}</p>
-        </div>
+    <!-- RESULTADOS -->
+    <div class="results-grid" *ngIf="resultado !== null">
+      <div class="result-card score-card" [ngClass]="obtenerColorResultado()">
+        <h3>🎯 Resultado estimado</h3>
+        <div class="score-value">{{ resultado }}</div>
+        <p>{{ evaluacion }}</p>
+        <small *ngIf="percentil !== null">
+          Percentil estimado: <strong>{{ percentil }}%</strong>
+        </small>
       </div>
 
-      <!-- Gráfico -->
-      <div class="col-md-6 mb-3">
-        <div class="card shadow-sm p-3 h-100">
-          <canvas baseChart [datasets]="chartData" [labels]="['Puntaje Global']" [options]="chartOptions"
-            [type]="'bar'">
-          </canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- Percentil -->
-    <div *ngIf="percentil !== null" class="alert alert-info mt-4">
-      📊 Este resultado está en el percentil <strong>{{ percentil }}%</strong> del ranking 2025.
-    </div>
-
-    <!-- Universidad más similar y comparables -->
-    <div class="row mt-4">
-      <!-- Universidad más similar -->
-      <div *ngIf="universidadSimilar" class="col-md-6 mb-3">
-        <div class="card h-100 p-3 border-success shadow-sm">
-          <h5 class="text-success">✅ Universidad más similar</h5>
-          <p><strong>Nombre:</strong> {{ universidadSimilar.nombre }}</p>
-          <p><strong>Ranking real:</strong> {{ universidadSimilar.ranking_real }}</p>
-          <p><strong>Puntaje real:</strong> {{ universidadSimilar.puntaje_real }}</p>
-        </div>
-      </div>
-
-      <!-- Universidades comparables -->
-      <div *ngIf="universidadesComparables && universidadesComparables.length > 0" class="col-md-6 mb-3">
-        <div class="card h-100 p-3 border-primary shadow-sm">
-          <h5 class="text-primary">📌 Universidades comparables:</h5>
-          <ul>
-            <li *ngFor="let uni of universidadesComparables">{{ uni }}</li>
-          </ul>
-        </div>
+      <div class="result-card chart-card">
+        <h3>📊 Visualización</h3>
+        <canvas
+          baseChart
+          [datasets]="chartData"
+          [labels]="['Puntaje Global']"
+          [options]="chartOptions"
+          [type]="'bar'"
+        >
+        </canvas>
       </div>
     </div>
 
-    <!-- Consulta por Pregunta -->
-    <fieldset class="border p-4 rounded mt-5 shadow-sm bg-white">
-      <legend class="float-none w-auto px-3">🔍 Consulta rápida por pregunta</legend>
+    <!-- UNIVERSIDAD SIMILAR Y COMPARABLES -->
+    <div class="results-grid secondary-grid">
+      <div *ngIf="universidadSimilar" class="info-card success-card">
+        <h3>✅ Universidad más similar</h3>
+        <p><strong>Nombre:</strong> {{ universidadSimilar.nombre }}</p>
+        <p><strong>Ranking real:</strong> {{ universidadSimilar.ranking_real }}</p>
+        <p><strong>Puntaje real:</strong> {{ universidadSimilar.puntaje_real }}</p>
+      </div>
 
-      <div class="input-group mb-3">
-        <select class="form-select" [(ngModel)]="preguntaSeleccionada" name="pregunta">
-          <option value="" disabled selected>Selecciona una pregunta</option>
-          <option *ngFor="let pregunta of preguntasDisponibles" [value]="pregunta">{{ pregunta }}</option>
+      <div
+        *ngIf="universidadesComparables && universidadesComparables.length > 0"
+        class="info-card primary-card"
+      >
+        <h3>📌 Universidades comparables</h3>
+        <ul>
+          <li *ngFor="let uni of universidadesComparables">{{ uni }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CONSULTA RÁPIDA -->
+    <section class="dashboard-card query-card">
+      <div class="card-header">
+        <h2>🔍 Consulta rápida por pregunta</h2>
+        <p>Selecciona una consulta frecuente para obtener resultados rápidos.</p>
+      </div>
+
+      <div class="query-box">
+        <select
+          class="custom-input"
+          [(ngModel)]="preguntaSeleccionada"
+          name="pregunta"
+        >
+          <option value="" disabled>Selecciona una pregunta</option>
+          <option *ngFor="let pregunta of preguntasDisponibles" [value]="pregunta">
+            {{ pregunta }}
+          </option>
         </select>
-        <button class="btn btn-primary" (click)="enviarPregunta()">Consultar</button>
+
+        <button class="query-btn" (click)="enviarPregunta()">
+          Consultar
+        </button>
       </div>
 
-      <!-- Respuesta de la consulta -->
-      <div *ngIf="respuestaPregunta && respuestaPregunta.length > 0" class="alert alert-secondary">
-        <h6>🏆 Resultado de la consulta:</h6>
+      <div
+        *ngIf="respuestaPregunta && respuestaPregunta.length > 0"
+        class="query-response"
+      >
+        <h4>🏆 Resultado de la consulta</h4>
         <ul>
           <li *ngFor="let uni of respuestaPregunta">
-            <strong>{{ uni.Institution_Name }}</strong> ({{ uni.Location }}) - Puntaje: {{ uni.Overall_Score || 'N/A' }}
+            <strong>{{ uni.Institution_Name }}</strong>
+            <span>({{ uni.Location }})</span>
+            - Puntaje: {{ uni.Overall_Score || 'N/A' }}
           </li>
         </ul>
       </div>
-    </fieldset>
+    </section>
 
-    <!-- Mensaje de error -->
-    <div *ngIf="error" class="alert alert-danger mt-4">{{ error }}</div>
+    <!-- ERROR -->
+    <div *ngIf="error" class="error-alert">
+      {{ error }}
+    </div>
   </div>
+</div>
+
+
 </div>

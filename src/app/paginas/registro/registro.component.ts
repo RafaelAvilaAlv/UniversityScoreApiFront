@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   Validators,
@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.scss']
 })
-export class RegistroComponent implements AfterViewInit {
+export class RegistroComponent {
   formularioRegistro: FormGroup;
   mensajeError = '';
   cargando = false;
@@ -44,10 +44,6 @@ export class RegistroComponent implements AfterViewInit {
       },
       { validators: this.validarClavesIguales }
     );
-  }
-
-  ngAfterViewInit(): void {
-    // Si luego necesitas lógica visual o de DOM, aquí va.
   }
 
   validarClavesIguales(control: AbstractControl): ValidationErrors | null {
@@ -134,5 +130,10 @@ export class RegistroComponent implements AfterViewInit {
         });
       }
     });
+  }
+
+
+  irLogin(): void {
+    this.router.navigate(['/login']);
   }
 }
